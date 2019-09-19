@@ -4,12 +4,15 @@ import com.yizhidu.pojo.Category;
 import com.yizhidu.pojo.TestPaper;
 import com.yizhidu.pojo.Topics;
 import com.yizhidu.service.PaperService;
+import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.jms.Topic;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -56,18 +59,41 @@ public class PaperController {
         return "paper";
     }
 
-    @RequestMapping(value = "/selCname" ,method = RequestMethod.GET)    //根据cid查询分类
+    @RequestMapping(value = "/selCname",method = RequestMethod.GET)    //根据cid查询分类
     @ResponseBody
     public Category selCatesByCid(int cid, HttpServletResponse response) throws IOException {
         System.out.println("selCname...");
-        Category category = paperService.selCname(cid);
+        Category category = paperService.selCatesByCid(cid);
         return category;
     }
-    @RequestMapping(value = "/checkTopic" ,method = RequestMethod.GET)    //根据cid查询分类
+    @RequestMapping(value = "/checkTopic" ,method = RequestMethod.GET)    //批改试卷
     @ResponseBody
-    public void checkTopic(int cid,String question) {
-        System.out.println("cid..."+cid);
-        System.out.println("question..."+question);
+    public void checkTopic(Topics topics , HttpServletRequest request) {
+
+        System.out.println("试卷中所有的题目"+topics.toString());
+
+        List<Category> list = paperService.selCates();
+        List<String> flaglist = null;//接收拼接的字符串
+        for (Category category :
+            list   ) {
+            //获取要拼接的cname
+            String cname = category.getCname();
+
+            //获取要拼接的题目标题数
+
+            //获取该cid下的题目数
+            int count = paperService.getCountWithCate(category.getCid());
+            for (int i=1;i<=count;i++){
+                //拼接
+                String flag = cname+"#"+i;
+                System.out.println("flag:"+flag);
+                flaglist.add(flag);
+            }
+
+        }
+
+        String parameter = request.getParameter("语文#1");
+        System.out.println("考生提交的答案:"+parameter);
 
     }
 }

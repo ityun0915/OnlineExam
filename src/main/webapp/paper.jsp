@@ -15,7 +15,7 @@
 
 
 
-<form action="checkTopic" method="get" id="form1">
+<form action="checkTopic" method="post" id="form1">
     <div>
         <h3>在线考试试题如下(共${testPaper.count}题): &nbsp;&nbsp;
             <input id="input1" type="submit" value="提交试卷"/> &nbsp;&nbsp;
@@ -41,13 +41,13 @@
                             ${topic.topic}</h3><br>
                 </div>
                 <div style="margin-left:150px ">
-                    <div ><input type="radio" name="option">${topic.option1}</div>&nbsp;
-                    <div><input type="radio" name="option">${topic.option2}</div><br>
-                    <div><input type="radio" name="option">${topic.option3}</div>&nbsp;
-                    <div><input type="radio" name="option">${topic.option4}</div>&nbsp;
+                    <div><input type="radio" name="${map.key}#${ status.index + 1}" value="${topic.option1}">${topic.option1}</div>&nbsp;
+                    <div><input type="radio" name="${map.key}#${ status.index + 1}" value="${topic.option2}">${topic.option2}</div><br>
+                    <div><input type="radio" name="${map.key}#${ status.index + 1}" value="${topic.option3}">${topic.option3}</div>&nbsp;
+                    <div><input type="radio" name="${map.key}#${ status.index + 1}" value="${topic.option4}">${topic.option4}</div>&nbsp;
                     <%--隐藏域表单传输答案--%>
-                    <div ><input type="hidden" name="question">${topic.question}</div>
-                    <div ><input type="hidden" name="tid">${topic.tid}</div>
+                    <div ><input type="hidden" name="question" value="${topic.question}"></div>
+                    <%--<div ><input type="hidden" name="tid" value="${topic.tid}"></div>--%>
 
                 </div>
             </c:forEach>

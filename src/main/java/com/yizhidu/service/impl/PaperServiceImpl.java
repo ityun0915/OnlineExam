@@ -34,7 +34,7 @@ public class PaperServiceImpl implements PaperService {
            cate_count = 0;
         }
         list = paperMapper.selTopics(cid, cate_count );
-        Category category = paperMapper.selCname(cid);
+        Category category = paperMapper.selCatesByCid(cid);
         String cname = category.getCname();
 
         map.put(cname,list);
@@ -47,7 +47,12 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public Category selCname(int cid) {
-        return  paperMapper.selCname(cid);
+    public Category selCatesByCid(int cid) {
+        return  paperMapper.selCatesByCid(cid);
+    }
+
+    @Override
+    public int getCountWithCate(int cid) {
+        return  paperMapper.getCountWithCate(cid);
     }
 }

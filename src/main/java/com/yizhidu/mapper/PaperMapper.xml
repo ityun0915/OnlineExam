@@ -11,8 +11,12 @@
          select * from topics where cid=#{cid} order by rand() limit #{count}
     </select>
 
-    <select id="selCname" resultType="com.yizhidu.pojo.Category">
+    <select id="selCatesByCid" resultType="com.yizhidu.pojo.Category">
          select * from category where cid=#{cid}
+    </select>
+
+    <select id="getCountWithCate" parameterType="java.lang.Integer" resultType="Integer">
+         select count(1) from topics where cid=#{cid}
     </select>
 
 </mapper>
