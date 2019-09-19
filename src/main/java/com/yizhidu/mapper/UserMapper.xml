@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+ <mapper namespace="com.yizhidu.mapper.UserMapper">
+
+    <insert id="addUser" parameterType="com.yizhidu.pojo.User">
+      INSERT INTO USER (uid,username,password,nickname,email)
+      VALUES (#{uid},#{username},#{password},#{nickname},#{email})
+    </insert>
+
+    <select id="selUser" resultType="com.yizhidu.pojo.User">
+        select * from user where username=#{username}
+    </select>
+
+    <select id="selUserByUP" parameterType="com.yizhidu.pojo.User" resultType="com.yizhidu.pojo.User">
+        select * from user where username=#{username} and password=#{password}
+    </select>
+
+    <select id="selCates" resultType="com.yizhidu.pojo.Category">
+        select * from category
+    </select>
+
+    <select id="selTopicByCid" resultType="com.yizhidu.pojo.Topics">
+        select * from topics where cid=#{cid}
+    </select>
+
+</mapper>
