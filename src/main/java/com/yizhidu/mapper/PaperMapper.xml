@@ -18,5 +18,8 @@
     <select id="getCountWithCate" parameterType="java.lang.Integer" resultType="Integer">
          select count(1) from topics where cid=#{cid}
     </select>
+    <select id="getCount" resultType="Integer">
+         select count(1) from topics
+    </select>
 
 </mapper>

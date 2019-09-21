@@ -10,15 +10,54 @@
     <title>在线考试</title>
 </head>
 
+    <script type="text/javascript">
+
+        $("#question").load(function () {
+            alert("question加载了...")
+            checkPaper();
+        })
+
+        function checkPaper() {
+            $("input:radio").each(function(){
+                //获取考生答案
+                if(this.checked){
+                    var uValue = $(this).val();
+                    alert("考生答案:"+$(this).val());
+                    $("input:hidden").each(function () {
+                        //获取标准答案
+                        var pValue = $(this).val();
+                        // alert("正确答案:"+$(this).val());
+
+                        if (uValue == pValue) {
+                            $("#span02").html("<font color='blue'>回答正确!</font>");
+                            return false;
+                        }else {
+                            $("#span02").html ("<font color='red'>回答错误!正确答案为:</font>"+pValue);
+                        }
+                    })
+                }
+            });
+
+            /*$("input").each(function () {
+                if($("input:radio").check){
+                    if ($("input:hidden").val() == $("input:radio").val()) {
+                        $("#span02").html("<font color='blue'>回答正确!</font>");
+                    }else {
+                        $("#span02").html ("<font color='red'>回答错误!正确答案为:</font>"+pValue);
+                    }
+                }
+            })*/
+
+        }
+    </script>
+
 <body>
 <%@include file="header.jsp"%>
 
-
-
-<form action="checkTopic" method="post" id="form1">
+<form action="checkTopic" method="get" id="form1">
     <div>
         <h3>在线考试试题如下(共${testPaper.count}题): &nbsp;&nbsp;
-            <input id="input1" type="submit" value="提交试卷"/> &nbsp;&nbsp;
+            <input id="button1" type="button" onclick="checkPaper()" value="提交试卷"/> &nbsp;&nbsp;
             <span style="color: red" id="showTimes"></span>
         </h3>
         <font color="blue"> (注意:答题时间根据题目数计算,1题1分钟)</font>
@@ -38,7 +77,10 @@
             <c:forEach items="${map.value}" var="topic" varStatus="status">
                 <div style="margin-left:140px ">
                     <h3><td>${ status.index + 1}</td>.
-                            ${topic.topic}</h3><br>
+                            ${topic.topic}
+                        <span id="span02">aaa</span>
+                    </h3><br> <%--显示答案区域--%>
+                    <%--<div><input type="hidden" name="topic" value="${topic.topic}"></div>--%>
                 </div>
                 <div style="margin-left:150px ">
                     <div><input type="radio" name="${map.key}#${ status.index + 1}" value="${topic.option1}">${topic.option1}</div>&nbsp;
@@ -46,8 +88,11 @@
                     <div><input type="radio" name="${map.key}#${ status.index + 1}" value="${topic.option3}">${topic.option3}</div>&nbsp;
                     <div><input type="radio" name="${map.key}#${ status.index + 1}" value="${topic.option4}">${topic.option4}</div>&nbsp;
                     <%--隐藏域表单传输答案--%>
-                    <div ><input type="hidden" name="question" value="${topic.question}"></div>
+                    <div ><input type="hidden" id="question" name="question" value="${topic.question}"></div>
                     <%--<div ><input type="hidden" name="tid" value="${topic.tid}"></div>--%>
+                    <%
+                        String question = request.getParameter("question");
+                    %>
 
                 </div>
             </c:forEach>
@@ -79,7 +124,7 @@
         document.getElementById("showTimes").innerHTML = toDays ();
         if (second == 0){
             alert("作答时间到,正在为您改卷...");
-            $("#form1").submit();
+            $("#button1").click();
         }
     }, 1000);
 </script>

@@ -12,5 +12,6 @@ public interface PaperService {
     public Map<String,List<Topics>> createPaper(Map<String,List<Topics>> map,int cid, int cate_count);//根据cid和题型数量创建试卷
     public Category selCatesByCid(int cid);
     public int getCountWithCate(int cid);
+    public int getCount();
 
 }

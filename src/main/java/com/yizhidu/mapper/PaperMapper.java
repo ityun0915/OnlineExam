@@ -11,4 +11,5 @@ public interface PaperMapper {
     public List<Topics> selTopics(@Param("cid") int cid, @Param("count") int cate_count);//根据cid随机查询coun数量的题目
     public Category selCatesByCid(int cid);
     public int getCountWithCate(int cid);
+    public int getCount();
 }

@@ -1,13 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+ id="WebApp_ID" version="2.5">
+  <!--配置spring的核心监听器
+  作用：在tomcat启动的时候，创建spring 的工厂类对象，把工厂类对象绑定到tomcat的上下文中
+  以前写java项目第一步都是创建spring的工厂类对象
+  ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+  运行web项目还需不需要spring的工厂类对象？需要的。什么时候创建比较合适？tommcat启动的时候创建比
+  较合适。
+  所以spring就为我们提供了一个监听器来实现这些代码。
+  -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!--手动指定spring 主配置文件的位置和名称
+  默认spring会从WEB-INF目录下加载applicationContext.xml作为spring的主配置文件，但是一般我们不喜欢把主
+  配置文件放到这个地方
+  ，我们习惯放到resources目录下，所以一般都会手动指定spring 主配置文件的位置和名称
+  -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+
+  <!--spring mvc的前端控制器
+作用：拦截相应的请求 交给spring mvc处理
+-->
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!--手动指定spring mvc的主配置文件位置和名称
+    默认spring mvc会从WEB-INF下去加载[servlet的name]-servlet.xml 这个主配置文件，针对当前的例子
+    主配置文件的名称应该是spring-mvc-servlet.xml. 一般我们还是希望把spring mvc的主配置文件放到resources下
+    面，所以一般都会
+    手动指定该项
+    -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:springmvc.xml</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+
+  <filter>
+    <filter-name>characterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+<!--自动登陆过滤器-->
+  <filter>
+    <filter-name>autoLoginFilter</filter-name>
+    <filter-class>com.yizhidu.filter.autoLoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>autoLoginFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+</web-app>
+
+
+
+
+
+<!--<?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
-
-<!--<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >-->
-
   <display-name>Archetype Created Web Application</display-name>
 
   <context-param>
@@ -15,13 +87,14 @@
     <param-value>
       classpath:applicationContext.xml
     </param-value>
-
   </context-param>
-  <!-- 监听器 -->
+
+  &lt;!&ndash; spring监听器 &ndash;&gt;
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
-  <!-- SpringMVC前端控制器 -->
+   
+  &lt;!&ndash; SpringMVC前端控制器 &ndash;&gt;
   <servlet>
     <servlet-name>springmvc</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -35,9 +108,10 @@
     <servlet-name>springmvc</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-  <!-- 字符编码过滤器 -->
-  <!--<filter>
-    <filter-name>encoding</filter-name>
+
+  &lt;!&ndash; 字符编码过滤器 &ndash;&gt;
+  <filter>
+    <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
     <init-param>
       <param-name>encoding</param-name>
@@ -45,11 +119,11 @@
     </init-param>
   </filter>
   <filter-mapping>
-    <filter-name>encoding</filter-name>
+    <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
-  </filter-mapping>-->
+  </filter-mapping>
 
-  <!-- 解决数据库响应中文乱码的问题,主要是针对post请求的数据 -->
+  &lt;!&ndash; 解决数据库响应中文乱码的问题,主要是针对post请求的数据 &ndash;&gt;
   <filter>
     <filter-name>characterEncodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -67,7 +141,7 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-  <!--自动登陆过滤器-->
+  &lt;!&ndash;自动登陆过滤器&ndash;&gt;
   <filter>
     <filter-name>autoLoginFilter</filter-name>
     <filter-class>com.yizhidu.filter.autoLoginFilter</filter-class>
@@ -77,4 +151,4 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-</web-app>
+</web-app>-->

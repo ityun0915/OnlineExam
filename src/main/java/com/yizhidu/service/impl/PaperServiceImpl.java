@@ -55,4 +55,8 @@ public class PaperServiceImpl implements PaperService {
     public int getCountWithCate(int cid) {
         return  paperMapper.getCountWithCate(cid);
     }
+    @Override
+    public int getCount() {
+        return  paperMapper.getCount();
+    }
 }
